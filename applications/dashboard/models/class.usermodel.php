@@ -1146,6 +1146,12 @@ class UserModel extends Gdn_Model {
       if (!$Valid)
          return FALSE; // plugin blocked registration
 
+      // Do not require email confirmation or CAPTCHA for authentication through external provider
+      if ($FormPostValues['Provider']) {
+         $Options['NoConfirmEmail'] = TRUE;
+         $Options['CheckCaptcha'] = FALSE;
+      }
+
       switch (strtolower(C('Garden.Registration.Method'))) {
          case 'captcha':
             $UserID = $this->InsertForBasic($FormPostValues, GetValue('CheckCaptcha', $Options, TRUE), $Options);
